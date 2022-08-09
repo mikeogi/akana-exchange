@@ -1,0 +1,24 @@
+@use "sass:map";
+@import url(//fonts.googleapis.com/css?family=Open+Sans);
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html { font-size: 62.5%; }
+
+body.theme-dark {
+  --background: 42, 37, 45;
+  --text: 255, 255, 255;
+  --accent: 20, 141, 178;
+  --accent-text: 28, 28, 28;
+  --extra: 180, 180, 180;
+  --accent_2: 255, 255, 255;
+}
+
+body {
+  font-size: 1.4rem;
+  font-family: 'Open Sans', sans-serif;
+  background-color: rgba(var(--background));
+}

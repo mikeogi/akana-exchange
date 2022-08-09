@@ -2,12 +2,20 @@ import { defineNuxtConfig } from 'nuxt'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  ssr: false,
   srcDir: 'src/',
   typescript: {
-    strict: true
+    strict: true,
   },
   alias: {
-    '@': '<srcDir>',
-    '@@': '<rootDir>'
+    '~styles': '<srdDir>/assets/css',
   },
+  css: ['@/assets/css/main.scss'],
+  // vite: {
+  //   css: {
+  //     preprocessorOptions: {
+  //       sass
+  //     },
+  //   },
+  // },
 })
