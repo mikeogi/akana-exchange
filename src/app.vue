@@ -3,14 +3,8 @@ NuxtLayout
   NuxtPage
 </template>
 
-<script>
-export default {
-  name: 'App',
-  mounted() {
-    const a = 10
-    console.log('ds')
-  },
-}
+<script lang="ts" setup>
+import 'vue-toast-notification/dist/theme-sugar.css'
 </script>
 
 <style scoped></style>

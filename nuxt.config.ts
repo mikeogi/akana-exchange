@@ -11,11 +11,5 @@ export default defineNuxtConfig({
     '~styles': '<srdDir>/assets/css',
   },
   css: ['@/assets/css/main.scss'],
-  // vite: {
-  //   css: {
-  //     preprocessorOptions: {
-  //       sass
-  //     },
-  //   },
-  // },
+  modules: ['@pinia/nuxt'],
 })

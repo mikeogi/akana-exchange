@@ -4,68 +4,97 @@ div(:class='$style.component')
     label(:class='$style.label') {{ label }}
     input(
       type='text'
+      :readonly="disable"
       inputmode='decimal'
       :class='$style.input'
-      :value="amount"
-      @input='$emit("update:amount", $event.target.value)'
+      maxlength="18"
+      :value="isNaN(amount) ? '' : amount"
+      @input='$emit("update:amount", parseFloat($event.target.value))'
       @keypress='isNumber'
     )
     button(
       type='button'
+      ref="currencyButtonRef"
       :class='$style.currency_button'
-      @click='toggleList'
+      @click='handleClickCurrencyButton'
     )
       span(:class='$style.currency_button_label') {{ currentCurrency?.label || '-' }}
       span(:class='$style.currency_button_code') {{ currentCurrency?.code || '-' }}
       div(role='button' :class='[$style.currency_button_arrow, { [$style["__open"]]: openList }]') ➜
-  div(:class='$style.currency_list')
+  div(
+    v-click-outside="[handleClickOutsideList, excludeOutsideNodes]"
+    :class='$style.currency_list'
+  )
     AppListSearch(
       v-if="openList"
       :list='currencyList'
       :code='currencyCode'
+      placeholder="Enter currency name"
       @update:code='handleSelectCurrency'
     )
 </template>
 
 <script lang="ts" setup>
 // @TODO: problem import/export types in SFC. ex: https://github.com/vuejs/core/issues/4294
-import { computed, ref } from 'vue'
+// @TODO: move the input for numbers to a separate component
+import { computed, onMounted, ref } from 'vue'
 import useIsNumber from '~/hooks/useIsNumber'
 import type { IAppListSearch } from '~/components/AppListSearch/types'
 
 interface IAppCurrencyInputProps {
   label?: string
   currencyList?: IAppListSearch['list']
-  amount: string
+  amount: number
   currencyCode: string
+  disable?: boolean
 }
+
+onMounted(() => {
+  excludeOutsideNodes.value.push(currencyButtonRef.value)
+})
 
 const props = withDefaults(defineProps<IAppCurrencyInputProps>(), {
   currencyList: () => [],
   label: undefined,
   placeholder: '',
+  disable: false,
 })
 
-console.log('props.amount', props.amount)
-
 const emit = defineEmits<{
-  (event: 'update:amount', payload: string): void
-  (event: 'update:currencyCode', payload: string): void
+  (event: 'update:amount', payload: IAppCurrencyInputProps['amount']): void
+  (
+    event: 'update:currencyCode',
+    payload: IAppCurrencyInputProps['currencyCode']
+  ): void
 }>()
 
-const openList = ref(false)
-
 const { isNumber } = useIsNumber()
+
+const openList = ref(false)
+const currencyButtonRef = ref<HTMLButtonElement | null>(null)
+const excludeOutsideNodes = ref<Array<HTMLButtonElement | null>>([])
 
 const currentCurrency = computed(() =>
   props.currencyList.find(({ code }) => code === props.currencyCode)
 )
 
-const toggleList = () => (openList.value = !openList.value)
+const handleClickOutsideList = () => {
+  if (openList.value) {
+    toggleList()
+  }
+}
+
+const handleClickCurrencyButton = () => {
+  toggleList()
+}
+
+const toggleList = () => {
+  openList.value = !openList.value
+}
 
 const handleSelectCurrency = (code: string) => {
-  toggleList()
   emit('update:currencyCode', code)
+  toggleList()
 }
 </script>
 
@@ -84,8 +113,6 @@ const handleSelectCurrency = (code: string) => {
   color: rgba(var(--text), 0.65);
 }
 .input {
-  border: none;
-  outline: none;
   line-height: 2.4rem;
   width: 100%;
   font-size: 1.6rem;
@@ -101,9 +128,7 @@ const handleSelectCurrency = (code: string) => {
 }
 .currency_button {
   cursor: pointer;
-  outline: none;
   width: 12rem;
-  border: none;
   position: absolute;
   padding-left: 1.2rem;
   padding-top: 0.8rem;
@@ -161,6 +186,8 @@ const handleSelectCurrency = (code: string) => {
   white-space: nowrap;
 }
 .currency_list {
+  z-index: 3;
+  margin-top: 0.2rem;
   position: absolute;
   width: 100%;
 }

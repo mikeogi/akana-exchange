@@ -8,13 +8,33 @@
 }
 html { font-size: 62.5%; }
 
+a {
+  text-decoration: none;
+}
+
+button {
+  background: none;
+  padding: 0;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+input {
+  padding: 0;
+  outline: none;
+  border: none;
+}
+
 body.theme-dark {
   --background: 42, 37, 45;
+  --swap-bg: 25, 27, 31;
   --text: 255, 255, 255;
   --accent: 20, 141, 178;
   --accent-text: 28, 28, 28;
   --extra: 180, 180, 180;
   --accent_2: 255, 255, 255;
+  --swap_button: 6, 241, 116;
 }
 
 body {
