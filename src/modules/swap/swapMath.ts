@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 
 // Usually this value is obtained from api
 const DECIMAL = 6
-const formatNumber = (value: number): number => {
+export const formatNumber = (value: number): number => {
   return parseFloat(new BigNumber(value).toFixed(DECIMAL))
 }
 

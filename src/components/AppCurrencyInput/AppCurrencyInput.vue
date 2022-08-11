@@ -9,7 +9,7 @@ div(:class='$style.component')
       :class='$style.input'
       maxlength="18"
       :value="isNaN(amount) ? '' : amount"
-      @input='$emit("update:amount", parseFloat($event.target.value))'
+      @input='$emit("update:amount", formatNumber(parseFloat($event.target.value)))'
       @keypress='isNumber'
     )
     button(
@@ -39,6 +39,7 @@ div(:class='$style.component')
 // @TODO: move the input for numbers to a separate component
 import { computed, onMounted, ref } from 'vue'
 import useIsNumber from '~/hooks/useIsNumber'
+import { formatNumber } from '~/modules/swap/swapMath'
 import type { IAppListSearch } from '~/components/AppListSearch/types'
 
 interface IAppCurrencyInputProps {
