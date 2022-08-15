@@ -68,13 +68,6 @@ onMounted(async () => {
   await startPollingRates(FETCH_RATES_INTERVAL)
 })
 
-onBeforeUnmount(() => {
-  if (pollingRates.value) {
-    clearInterval(pollingRates.value)
-    pollingRates.value = null
-  }
-})
-
 const swapStore = useSwap()
 
 const { start: startPollingRates, value: secToFetchRates } = useCountdown(
@@ -88,7 +81,6 @@ const baseCurrency = ref('')
 const baseAmount = ref(0)
 const quoteCurrency = ref('')
 const quoteAmount = ref(0)
-const pollingRates = ref<ReturnType<typeof setInterval> | null>(null)
 const rotateButton = ref(false)
 
 const commonLoading = computed(() => swapStore.commonLoading)
