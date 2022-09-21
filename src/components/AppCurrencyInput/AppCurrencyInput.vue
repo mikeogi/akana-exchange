@@ -81,11 +81,13 @@ const currentCurrency = computed(() =>
 
 const handleClickOutsideList = () => {
   if (openList.value) {
+    console.log('test 1')
     toggleList()
   }
 }
 
 const handleClickCurrencyButton = () => {
+  console.log('test 1')
   toggleList()
 }
 
